@@ -1,0 +1,95 @@
+public class Dispositivo {
+    private String nome;
+    private boolean estado;
+
+    public Dispositivo(String nome) {
+        this.nome = nome;
+        this.estado = false;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+}
+
+public class Comodo {
+    private String nome;
+    private List<Dispositivo> dispositivos;
+
+    public Comodo(String nome) {
+        this.nome = nome;
+        this.dispositivos = new ArrayList<>();
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public List<Dispositivo> getDispositivos() {
+        return dispositivos;
+    }
+
+    public void addDispositivo(Dispositivo dispositivo) {
+        dispositivos.add(dispositivo);
+    }
+}
+
+public class Casa {
+    private List<Comodo> comodos;
+
+    public Casa() {
+        this.comodos = new ArrayList<>();
+    }
+
+    public List<Comodo> getComodos() {
+        return comodos;
+    }
+
+    public void addComodo(Comodo comodo) {
+        comodos.add(comodo);
+    }
+
+    public void associarDispositivoComodo(String nomeDispositivo, String nomeComodo) {
+        for (Comodo comodo : comodos) {
+            if (comodo.getNome().equals(nomeComodo)) {
+                for (Dispositivo dispositivo : comodo.getDis positivos()) {
+                if (dispositivo.getNome().equals(nomeDispositivo)) {
+                    dispositivo.setEstado(!dispositivo.getEstado());
+                    System.out.println("Dispositivo " + nomeDispositivo + " alterado para estado " + (dispositivo.getEstado() ? "ligado" : "desligado"));
+                    return;
+                }
+            }
+        }
+    }
+    System.out.println("Dispositivo " + nomeDispositivo + " não encontrado no cômodo " + nomeComodo);
+}
+
+public void exibirEstadoDispositivos() {
+    System.out.println("Estado atual dos dispositivos:");
+    for (Comodo comodo : comodos) {
+        System.out.println("Cômodo: " + comodo.getNome());
+        for (Dispositivo dispositivo : comodo.getDispositivos()) {
+            System.out.println(" - " + dispositivo.getNome() + ": " + (dispositivo.getEstado() ? "ligado" : "desligado"));
+        }
+    }
+}
+
+public void salvarEstadoDispositivos(String arquivo) {
+    try (PrintWriter out = new PrintWriter(arquivo)) {
+        for (Comodo comodo : comodos) {
+            for (Dispositivo dispositivo : comodo.getDispositivos()) {
+                out.println(comodo.getNome() + "," + dispositivo.getNome() + "," + (dispositivo.getEstado() ? "ligado" : "desligado"));
+            }
+        }
+    } catch (FileNotFoundException e) {
+        System.out.println("Erro ao salvar estado dos dispositivos: " + e.getMessage());
+    }
+}
